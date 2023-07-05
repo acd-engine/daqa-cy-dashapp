@@ -1,8 +1,7 @@
-import requests, gzip, io, json
+import requests, io
 
 # for data mgmt
 import pandas as pd
-import ast
 
 # for plotting
 import plotly.graph_objects as go
@@ -17,52 +16,25 @@ def fetch_small_data_from_github(fname):
     rawdata = response.content.decode('utf-8')
     return pd.read_csv(io.StringIO(rawdata))
 
-def fetch_data(filetype='csv', acdedata='organization'):
-    urls = fetch_small_data_from_github('acde_data_gdrive_urls.csv')
-    sharelink = urls[urls.data == acdedata][filetype].values[0]
-    url = f'https://drive.google.com/u/0/uc?id={sharelink}&export=download&confirm=yes'
-    
-    response = requests.get(url)
-    decompressed_data = gzip.decompress(response.content)
-    decompressed_buffer = io.StringIO(decompressed_data.decode('utf-8'))
+years = [1820, 1858, 1859, 1860, 1862, 1863, 1864, 1865, 1866, 1867, 1869, 1870, 1871, 1872, 1874, 1875, 
+         1876, 1877, 1879, 1882, 1883, 1884, 1885, 1886, 1887, 1888, 1889, 1890, 1891, 1892, 1893, 1894, 
+         1896, 1897, 1898, 1899, 1900, 1901, 1902, 1903, 1904, 1905, 1906, 1907, 1908, 1909, 1910, 1911, 
+         1912, 1913, 1914, 1915, 1916, 1917, 1918, 1919, 1920, 1921, 1922, 1923, 1924, 1925, 1926, 1927, 
+         1928, 1929, 1930, 1931, 1932, 1933, 1934, 1935, 1936, 1937, 1938, 1939, 1940, 1941, 1944, 1945, 
+         1946, 1947, 1948, 1949, 1950, 1951, 1952, 1953, 1954, 1955, 1956, 1957, 1958, 1959, 1960, 1961, 
+         1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 
+         1978, 1979, 1980, 1981, 1982, 1983, 1984, 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 
+         1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 
+         2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2022, 2029]
 
-    try:
-        if filetype == 'csv': df = pd.read_csv(decompressed_buffer, low_memory=False)
-        else: df = [json.loads(jl) for jl in pd.read_json(decompressed_buffer, lines=True, orient='records')[0]]
-        return pd.DataFrame(df)
-    except: return None 
-
-def fetch_all_DAQA_data():
-    daqa_data_dict = dict()
-    for entity in ['work']:
-        daqa_this_entity = fetch_data(acdedata=entity)
-        daqa_data_dict[entity] = daqa_this_entity[daqa_this_entity.data_source.str.contains('DAQA')]
-    return daqa_data_dict
-
-df_daqa_dict = fetch_all_DAQA_data() # 1 min if data is already downloaded
-daqa_work = df_daqa_dict['work']
-
-# get year data
-daqa_works_years = []
-
-for idx,row in daqa_work.iterrows():
-    if isinstance(row['coverage_range'], str): 
-        if "date_end" in row['coverage_range']:
-            comp_yr = pd.json_normalize(ast.literal_eval(row['coverage_range'])['date_range'])['date_end.year'].values[0]
-            daqa_works_years.append(int(comp_yr))
-
-daqa_works_years.remove(min(daqa_works_years))
-
-# Count the occurrences of each year
-year_counts = {}
-for year in sorted(daqa_works_years): year_counts[year] = year_counts.get(year, 0) + 1
-
-# Separate the years and counts into separate lists
-years = list(year_counts.keys())
-counts = list(year_counts.values())
+counts = [1, 1, 1, 1, 2, 4, 5, 4, 2, 3, 2, 2, 1, 2, 3, 1, 3, 1, 1, 2, 1, 2, 9, 2, 2, 9, 14, 7, 4, 3, 1, 1, 
+          5, 3, 2, 1, 4, 6, 5, 2, 7, 2, 5, 7, 7, 4, 7, 4, 3, 6, 7, 16, 2, 3, 8, 9, 10, 8, 6, 8, 16, 8, 9, 
+          11, 9, 15, 6, 8, 2, 6, 21, 20, 26, 22, 20, 11, 13, 8, 1, 1, 2, 4, 2, 3, 2, 4, 7, 10, 10, 15, 15, 
+          19, 28, 24, 42, 17, 23, 25, 33, 40, 40, 18, 44, 37, 23, 9, 17, 12, 3, 11, 13, 11, 4, 10, 8, 16, 
+          13, 9, 7, 9, 8, 7, 15, 10, 15, 3, 4, 4, 4, 6, 7, 6, 4, 6, 14, 2, 3, 4, 5, 5, 3, 4, 5, 2, 6, 3, 
+          8, 7, 3, 5, 5, 8, 4, 1, 5, 1, 1]
 
 # load data
-# socio_econ_cy = pd.read_csv('data/socioecon/SocioEcon_CY.csv')
 socio_econ_cy = fetch_small_data_from_github('DAQA_socioecon_cy.csv')
 
 # if 000 is in column name then multiply column values by 1000 and remove 000 from column name
