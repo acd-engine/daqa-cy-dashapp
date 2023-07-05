@@ -121,17 +121,17 @@ def update_plot(year_range, y_axis_limit):
         yaxis_title="Count",
         xaxis_range=[start_year, end_year],
         yaxis_range=[0, y_axis_limit],  # Use the selected y-axis limit
-        height=800,
+        height=700,
 
         # make legend text font smaller
 
         legend=dict(
                 orientation="h",
                 yanchor="bottom",
-                y=-1.8,
+                y=-0.75,
                 xanchor="center",
                 x=0.5,
-                font=dict(size=7.5)
+                font=dict(size=12)
             )
     )
     
