@@ -3,3 +3,4 @@ dash_html_components==2.0.0
 pandas
 plotly==5.11.0
 Requests==2.31.0
+gunicorn
