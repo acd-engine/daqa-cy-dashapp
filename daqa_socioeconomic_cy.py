@@ -12,9 +12,6 @@ from dash import dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 
-import warnings
-warnings.filterwarnings("ignore")
-
 # provide folder_name which contains uncompressed data i.e., csv and jsonl files
 # only need to change this if you have already downloaded data
 # otherwise data will be fetched from google drive
@@ -96,6 +93,7 @@ fig1.update_layout(title="Completed Buildings by Year, Calendar Year", xaxis_tit
 fig2 = go.Figure()
 
 app = dash.Dash(__name__)
+server = app.server
 
 app.layout = html.Div(
     # style={'overflow-y': 'hidden'},
@@ -185,4 +183,4 @@ def update_plot(year_range, y_axis_limit):
     return updated_fig1, updated_fig2, heading_text
 
 if __name__ == '__main__':
-    app.run_server(debug=True, host='127.0.0.1')
+    app.run_server(debug=False)
