@@ -1,22 +1,15 @@
-import requests, gzip, io, os, json
+import requests, gzip, io, json
 
 # for data mgmt
 import pandas as pd
-import numpy as np
 import ast
 
 # for plotting
 import plotly.graph_objects as go
-import dash # !pip install dash
+import dash
 from dash import dcc
-import dash_html_components as html
-from dash.dependencies import Input, Output, State
-
-# provide folder_name which contains uncompressed data i.e., csv and jsonl files
-# only need to change this if you have already downloaded data
-# otherwise data will be fetched from google drive
-global folder_name
-folder_name = 'data/local'
+from dash import html
+from dash.dependencies import Input, Output
 
 def fetch_small_data_from_github(fname):
     url = f"https://raw.githubusercontent.com/acd-engine/jupyterbook/master/data/analysis/{fname}"
@@ -24,15 +17,7 @@ def fetch_small_data_from_github(fname):
     rawdata = response.content.decode('utf-8')
     return pd.read_csv(io.StringIO(rawdata))
 
-def check_if_csv_exists_in_folder(filename):
-    try: return pd.read_csv(os.path.join(folder_name, filename), low_memory=False)
-    except: return None
-
 def fetch_data(filetype='csv', acdedata='organization'):
-    # first check if the data exists in current directory
-    data_from_path =  None # check_if_csv_exists_in_folder(filename)
-    if data_from_path is not None: return data_from_path
-
     urls = fetch_small_data_from_github('acde_data_gdrive_urls.csv')
     sharelink = urls[urls.data == acdedata][filetype].values[0]
     url = f'https://drive.google.com/u/0/uc?id={sharelink}&export=download&confirm=yes'
