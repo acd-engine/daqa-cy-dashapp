@@ -53,16 +53,43 @@ app = dash.Dash(__name__)
 server = app.server
 
 app.layout = html.Div(
-    # style={'overflow-y': 'hidden'},
+    style={
+        'transform': 'scale(0.7)',
+        'transform-origin': 'top left',
+        'width': '125%',  # Adjust the width to fit the zoomed content
+        'height': '125%',  # Adjust the height to fit the zoomed content
+    },
     children = [
-    html.H3(id='heading', children="Set Year Range"),
+    html.H2(id='heading', children="Set Year Range"),
     dcc.RangeSlider(
         id='year-slider',
         min=1820,
         max=2020,
         step=1,
         value=[1940, 1980],
-        marks={str(year): str(year) for year in range(1820, 2021, 10)}
+        # marks={str(year): str(year) for year in range(1820, 2021, 10)}
+    	marks={
+            1820: {'label': '1820', 'style': {'font-size': '20px'}},
+            1830: {'label': '1830', 'style': {'font-size': '20px'}},
+            1840: {'label': '1840', 'style': {'font-size': '20px'}},
+            1850: {'label': '1850', 'style': {'font-size': '20px'}},
+            1860: {'label': '1860', 'style': {'font-size': '20px'}},
+            1870: {'label': '1870', 'style': {'font-size': '20px'}},
+            1880: {'label': '1880', 'style': {'font-size': '20px'}},
+            1890: {'label': '1890', 'style': {'font-size': '20px'}},
+            1900: {'label': '1900', 'style': {'font-size': '20px'}},
+            1910: {'label': '1910', 'style': {'font-size': '20px'}},
+            1920: {'label': '1920', 'style': {'font-size': '20px'}},
+            1930: {'label': '1930', 'style': {'font-size': '20px'}},
+            1940: {'label': '1940', 'style': {'font-size': '20px'}},
+            1950: {'label': '1950', 'style': {'font-size': '20px'}},
+            1960: {'label': '1960', 'style': {'font-size': '20px'}},
+            1970: {'label': '1970', 'style': {'font-size': '20px'}},
+            1980: {'label': '1980', 'style': {'font-size': '20px'}},
+            1990: {'label': '1990', 'style': {'font-size': '20px'}},
+            2000: {'label': '2000', 'style': {'font-size': '20px'}},
+            2010: {'label': '2010', 'style': {'font-size': '20px'}},
+            2020: {'label': '2020', 'style': {'font-size': '20px'}}}
     ),
     dcc.Graph(id='plot1', figure=fig1),
     dcc.Dropdown(
@@ -128,10 +155,10 @@ def update_plot(year_range, y_axis_limit):
         legend=dict(
                 orientation="h",
                 yanchor="bottom",
-                y=-0.75,
+                y=-1.2,
                 xanchor="center",
                 x=0.5,
-                font=dict(size=12)
+                font=dict(size=14)
             )
     )
     
