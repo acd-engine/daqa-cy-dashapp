@@ -81,7 +81,7 @@ app2.layout = html.Div(
             2010: {'label': '2010', 'style': {'font-size': '20px'}},
             2020: {'label': '2020', 'style': {'font-size': '20px'}}}
     ),
-    dcc.Graph(id='plot1', figure=fig1),
+    dcc.Graph(id='plot1', figure=fig1, config={'doubleClick':False}),
     dcc.Dropdown(
         id='y-axis-limit',
         options=[
@@ -102,7 +102,7 @@ app2.layout = html.Div(
         value=350000000,
         placeholder="Select a y-axis limit"
     ),
-    dcc.Graph(id='plot2', figure=fig2)
+    dcc.Graph(id='plot2', figure=fig2, config={'doubleClick':False})
 ])
 
 @app2.callback(
