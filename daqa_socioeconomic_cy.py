@@ -45,7 +45,6 @@ for x_col in socio_econ_cy.columns:
 
 fig1 = go.Figure()
 fig1.add_trace(go.Scatter(x=years, y=counts, mode='lines', line=dict(color='red')))
-fig1.config.doubleClick = False
 fig1.update_layout(title="Completed Buildings by Year, Calendar Year", xaxis_title="Year", yaxis_title="Count")
 
 fig2 = go.Figure()
@@ -92,7 +91,7 @@ app.layout = html.Div(
             2010: {'label': '2010', 'style': {'font-size': '20px'}},
             2020: {'label': '2020', 'style': {'font-size': '20px'}}}
     ),
-    dcc.Graph(id='plot1', figure=fig1),
+    dcc.Graph(id='plot1', figure=fig1, config={'doubleClick':False}),
     dcc.Dropdown(
         id='y-axis-limit',
         options=[
@@ -113,7 +112,7 @@ app.layout = html.Div(
         value=350000,
         placeholder="Select a y-axis limit"
     ),
-    dcc.Graph(id='plot2', figure=fig2)
+    dcc.Graph(id='plot2', figure=fig2, config={'doubleClick':False})
 ])
 
 @app.callback(
