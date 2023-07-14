@@ -45,6 +45,7 @@ for x_col in socio_econ_cy.columns:
 
 fig1 = go.Figure()
 fig1.add_trace(go.Scatter(x=years, y=counts, mode='lines', line=dict(color='red')))
+fig1.config.doubleClick = False
 fig1.update_layout(title="Completed Buildings by Year, Calendar Year", xaxis_title="Year", yaxis_title="Count")
 
 fig2 = go.Figure()
@@ -161,7 +162,8 @@ def update_plot(year_range, y_axis_limit):
                 font=dict(size=14)
             )
     )
-    
+
+    updated_fig2.config.doubleClick = False
     heading_text = f"Year Range: {start_year} - {end_year}"
     
     return updated_fig1, updated_fig2, heading_text
